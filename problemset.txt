@@ -1,0 +1,40 @@
+70001: Hello World
+
+108001: Basic math operations
+
+108002: Monte Carlo method to estimating π
+
+108003: Euclidean Algorithm
+
+108004: Testing Prime Number
+
+108005: Extended Euclidean Algorithm
+
+108006: Generating List of Prime Numbers In A Given Range
+
+108007: Basic Regular Expression - Validating String
+
+108008: Adventure in the Kingdom
+
+108009: Creating A Magic Square
+
+108010: Count The Occurrence Of Words
+
+108011: Tower of Hanoi
+
+108012: Ultimate Code
+
+108013: Completing A Sudoku
+
+108014: Reading Files
+
+108015: Exception
+
+108016: Sudoku - class
+
+108017: Decorator: Debugging Code
+
+108101: Stable Marriage Problem
+
+108102: Completing A Sudoku - Advanced 
+

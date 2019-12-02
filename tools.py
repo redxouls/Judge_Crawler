@@ -4,12 +4,9 @@ def login():
     data = {'lgn':"",'pwd':""}
     s = requests.session()
     while True:
-        '''
+        
         data['lgn'] = input("username: ")
         data['pwd'] = input("password: ")
-        '''
-        data['lgn'] = 'b08901058'
-        data['pwd'] = 'Mason8912180203'
         resp = s.post('http://140.112.17.207/login',data)
         if resp.text.find("帳號或密碼錯誤") == -1:
             print("Login Succesfully!")
@@ -18,7 +15,7 @@ def login():
             print("帳號或密碼錯誤")
     return s, data['lgn']
 
-def download_source(*,session,sid,r,status='all'):
+def download_source(*,session,sid,r,status='all',solo=False):
     print('sid')
     s = session
     data = json.loads(requests.get('http://140.112.17.207/api/result?sid='+str(sid)).text)[0]
@@ -31,13 +28,18 @@ def download_source(*,session,sid,r,status='all'):
     except:
         name = ttl
     try:
+        os.mkdir('./'+uid)
+    except:
+        pass
+        #print(str(sid)+".txt"+"existed")
+    try:
         os.mkdir('./'+uid+"/"+name)
     except:
         pass
         #print(str(sid)+".txt"+"existed")
     filename = "./"+uid+"/"+ name +"/"+str(sid)+".txt"
     if str(sid)+".txt" in os.listdir('./'+uid+"/"+name) and not r:
-        return str(sid)+"Existed!"
+        return str(sid)+" Existed!"
     
     resp = s.get('http://140.112.17.207/source/highlight/'+str(sid))
     source = s.get('http://140.112.17.207/source/'+str(sid))
@@ -61,6 +63,23 @@ def download_source(*,session,sid,r,status='all'):
             allmessage[i] = temp.string.strip('\n')
         except:
             pass
+    if solo:
+        try:
+            os.mkdir("./temp/")
+        except:
+            pass
+        filename = "./temp/"+ str(sid)+ ".txt"
+        with open(filename,'w') as f:
+            f.write(ttl+": "+scr+'pt'+'\n'*3)
+            for i in range(len(allstatus)):
+                f.write(alltask[i]+": "+allstatus[i]+"\n")
+                f.write(allmessage[i])
+            f.write('\n')
+            f.write('source.py')
+            f.write('\n')
+            f.write('\n')
+            f.write(source.text)
+    filename = "./"+uid+"/"+ name +"/"+str(sid)+'_'+str(restext[res])+".txt"
     with open(filename,'w') as f:
         f.write(ttl+": "+scr+'pt'+'\n'*3)
         for i in range(len(allstatus)):
@@ -68,6 +87,7 @@ def download_source(*,session,sid,r,status='all'):
             f.write(allmessage[i])
         f.write('\n')
         f.write('source.py'+'\n')
+        f.write('\n')
         f.write(source.text)
     return str(sid)+": Sucessful!" 
 
@@ -115,18 +135,22 @@ def update_problemset():
         for key in problemset:
             t.write(str(key)+": "+str(problemset[key][0])+'\n'*2)
 
-def getuid(lgn=''):
+def getuid(*,lgn='',uid=''):
     update_usr_dic()
     with open('user.json','r') as f:
         usrdict = json.loads(f.read())
-    if lgn =='':
+    if lgn =='' and uid =='':
         while(True):
             username = input("username: ")
             if username in usrdict:
                 return usrdict[username]
             else:
                 print('Error: username not found')
-    else:
+    if uid !='':
+        for key in usrdict:
+            if usrdict[key] == uid:
+                return key
+    if lgn !='':
         username = lgn
         if username in usrdict:
             return usrdict[username]
@@ -167,4 +191,3 @@ def latestproblem():
             print(key,probdict[key])
     print('-------------')
     input("Press enter to move on")
-            
